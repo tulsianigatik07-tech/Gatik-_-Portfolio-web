@@ -4,127 +4,224 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* =========================================================================
+   Design System — Tailwind theme extension (design-system.md §9).
+   Single source of truth: raw token values live in :root below; this block
+   maps them to Tailwind utilities. No values are duplicated here.
+   ========================================================================= */
 @theme inline {
+  /* --- Fonts (design-system.md §3.1 / §9.2) --- */
+  --font-sans: var(--font-inter), -apple-system, "Segoe UI", Arial, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), Menlo, Consolas, monospace;
+  --font-serif: var(--font-fraunces), "Times New Roman", Georgia, serif;
+  --font-heading: var(--font-fraunces), "Times New Roman", Georgia, serif;
+
+  /* --- Color tokens (design-system.md §9.1) ---
+     Backgrounds: bg-base / bg-deep / bg-raised
+     Surfaces:    bg-surface-1 / bg-surface-2 / bg-surface-contrast
+     Borders:     border-hairline / border-hairline-subtle / border-hairline-strong
+     Text inks:   text-ink (primary) / text-ink-body / text-ink-muted / text-ink-faint
+                  (named "ink" because Tailwind reserves --text-* for font sizes) */
+  --color-base: var(--bg-base);
+  --color-deep: var(--bg-deep);
+  --color-raised: var(--bg-raised);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-contrast: var(--surface-contrast);
+  --color-hairline: var(--border-hairline);
+  --color-hairline-subtle: var(--border-subtle);
+  --color-hairline-strong: var(--border-strong);
+  --color-ink: var(--ink-primary);
+  --color-ink-body: var(--ink-body);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-red-core: var(--red-core);
+  --color-red-bright: var(--red-bright);
+  --color-red-dim: var(--red-dim);
+  --color-red-deep: var(--red-deep);
+  --color-red-glow: var(--red-glow);
+  --color-red-glow-soft: var(--red-glow-soft);
+  --color-gh-0: var(--gh-0);
+  --color-gh-1: var(--gh-1);
+  --color-gh-2: var(--gh-2);
+  --color-gh-3: var(--gh-3);
+  --color-gh-4: var(--gh-4);
+
+  /* --- shadcn/ui semantic layer → design tokens (override) --- */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* --- Type scale (design-system.md §3.2 / §3.3) --- */
+  --text-hero: clamp(2.5rem, 7vw, 4.5rem);
+  --text-hero--line-height: 1.04;
+  --text-hero--letter-spacing: -0.02em;
+  --text-section: clamp(2rem, 5vw, 3rem);
+  --text-section--line-height: 1.1;
+  --text-section--letter-spacing: -0.015em;
+  --text-project: clamp(1.375rem, 3vw, 1.75rem);
+  --text-project--line-height: 1.15;
+  --text-project--letter-spacing: -0.01em;
+  --text-substatement: 1.5rem;
+  --text-substatement--line-height: 1.3;
+  --text-substatement--letter-spacing: -0.01em;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.7;
+  --text-body-sm: 0.9375rem;
+  --text-body-sm--line-height: 1.6;
+  --text-label: 0.8125rem;
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0.18em;
+  --text-meta: 0.8125rem;
+  --text-meta--line-height: 1.5;
+  --text-meta--letter-spacing: 0.04em;
+  --text-nav: 0.8125rem;
+  --text-nav--line-height: 1;
+  --text-nav--letter-spacing: 0.1em;
+  --text-tag: 0.75rem;
+  --text-tag--line-height: 1.3;
+  --text-tag--letter-spacing: 0.08em;
+
+  /* --- Font weights (design-system.md §9.2) --- */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+
+  /* --- Line height (design-system.md §9.2) --- */
+  --leading-tight: 1.04;
+  --leading-heading: 1.1;
+  --leading-snug: 1.3;
+  --leading-body: 1.7;
+
+  /* --- Letter spacing (design-system.md §9.2) --- */
+  --tracking-heading: -0.02em;
+  --tracking-label: 0.18em;
+  --tracking-nav: 0.1em;
+  --tracking-tag: 0.08em;
+
+  /* --- Layout widths / containers (design-system.md §4.1) --- */
+  --container-measure: 65ch;
+  --container-narrow: 640px;
+  --container-content: 880px;
+  --container-page: 1200px;
+  --container-graph: 760px;
+
+  /* --- Breakpoints (design-system.md §4.2) --- */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* --- Radius (design-system.md §9.4) --- */
+  --radius-none: 0px;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-pill: 9999px;
+
+  /* --- Motion easings (design-system.md §9.6) ---
+     Canonical motion tokens (durations/stagger/offset) live in
+     src/lib/design/motion.ts for JS/Framer Motion consumers; these two
+     easings are mirrored here so they are also available as utilities. */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-calm: cubic-bezier(0.45, 0, 0.55, 1);
 }
 
+/* =========================================================================
+   Raw design tokens — SINGLE SOURCE OF TRUTH (design-system.md §9.1).
+   Dark-first: this palette IS the base theme. No light theme, no .dark variant.
+   ========================================================================= */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
+  color-scheme: dark;
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* Backgrounds */
+  --bg-base: #0a0a0b;
+  --bg-deep: #060607;
+  --bg-raised: #101012;
+
+  /* Surfaces */
+  --surface-1: #121214;
+  --surface-2: #17171a;
+  --surface-contrast: #1c1c20;
+
+  /* Borders */
+  --border-hairline: #1e1e22;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-strong: #2a2a30;
+
+  /* Text inks */
+  --ink-primary: #f5f5f4;
+  --ink-body: #a1a1aa;
+  --ink-muted: #71717a;
+  --ink-faint: #52525b;
+
+  /* Accent red */
+  --red-core: #e5484d;
+  --red-bright: #ff5c5c;
+  --red-dim: #b22a2e;
+  --red-deep: #7a1d20;
+  --red-glow: rgba(229, 72, 77, 0.14);
+  --red-glow-soft: rgba(229, 72, 77, 0.07);
+
+  /* GitHub contribution scale (red, never green) */
+  --gh-0: #1c1c20;
+  --gh-1: #3d1417;
+  --gh-2: #7a1d20;
+  --gh-3: #b22a2e;
+  --gh-4: #e5484d;
+
+  /* shadcn semantic layer mapped to design tokens (dark-first) */
+  --radius: 0.25rem;
+  --background: var(--bg-base);
+  --foreground: var(--ink-primary);
+  --card: var(--surface-1);
+  --card-foreground: var(--ink-primary);
+  --popover: var(--surface-2);
+  --popover-foreground: var(--ink-primary);
+  --primary: var(--ink-primary);
+  --primary-foreground: var(--bg-base);
+  --secondary: var(--surface-2);
+  --secondary-foreground: var(--ink-primary);
+  --muted: var(--surface-1);
+  --muted-foreground: var(--ink-muted);
+  --accent: var(--red-core);
+  --accent-foreground: var(--ink-primary);
+  --destructive: var(--red-core);
+  --border: var(--border-hairline);
+  --input: var(--border-strong);
+  --ring: var(--red-bright);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
     @apply font-sans;
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-base text-ink antialiased;
+  }
+  /* Accessibility: keyboard focus ring = 2px red-bright @ 2px offset, never removed
+     (design-system.md §8.2). Uses :focus-visible so pointer interactions stay quiet. */
+  :focus-visible {
+    outline: 2px solid var(--red-bright);
+    outline-offset: 2px;
   }
 }
