@@ -55,7 +55,7 @@ const projects = [
       "Contribution-focused engineering path aimed at Google Summer of Code, repository understanding, open source participation, and learning in public.",
     tech: ["Git", "GitHub", "Open Source", "Documentation", "Code Review"],
     href: "https://github.com/tulsianigatik07-tech",
-    cover: "oss",
+    image: "/open-source-journey-cover-final.jpg",
   },
 ];
 
@@ -178,7 +178,7 @@ export default function Home() {
               <a href="#experience">experience</a>
             </li>
             <li>
-              <a href="#journey">journey</a>
+              <a href="/journey">journey</a>
             </li>
             <li>
               <a href="#oss">github</a>
