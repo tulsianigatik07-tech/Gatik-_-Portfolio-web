@@ -77,6 +77,16 @@ function redTone(columnIndex: number, totalColumns: number, opacity: number) {
   return `rgba(220,38,38,${opacity})`;
 }
 
+function getMotionSettings() {
+  const isMobile = window.matchMedia("(max-width: 700px)").matches;
+  const isVerySmall = window.matchMedia("(max-width: 430px)").matches;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  return { isMobile, isVerySmall, prefersReducedMotion };
+}
+
 type Particle = {
   x: number;
   y: number;
@@ -98,16 +108,19 @@ export function HeroCodeField() {
     const render = () => {
       field.textContent = "";
 
+      const { isMobile, isVerySmall, prefersReducedMotion } =
+        getMotionSettings();
       const width = window.innerWidth;
       const height = window.innerHeight;
-      const charWidth = 9;
-      const charHeight = 15;
-      const rows = Math.ceil(height / charHeight) + 4;
+      const charWidth = isVerySmall ? 18 : isMobile ? 15 : 9;
+      const charHeight = isMobile ? 18 : 15;
+      const densityScale = prefersReducedMotion ? 0.45 : isMobile ? 0.64 : 1;
+      const rows = Math.ceil(height / charHeight) + (isMobile ? 2 : 4);
       const totalColumns = Math.ceil(width / charWidth) + 1;
 
       for (let columnIndex = 0; columnIndex < totalColumns; columnIndex += 1) {
         const x = columnIndex * charWidth;
-        const density = columnDensity(x, width);
+        const density = columnDensity(x, width) * densityScale;
 
         if (Math.random() > density + 0.05) continue;
 
@@ -115,18 +128,21 @@ export function HeroCodeField() {
         column.className = "code-col";
         column.style.left = `${x}px`;
 
-        const duration = 55 + Math.random() * 90;
+        const duration = isMobile
+          ? 96 + Math.random() * 72
+          : 55 + Math.random() * 90;
         column.style.animationDuration = `${duration.toFixed(1)}s`;
         column.style.animationDelay = `${(-Math.random() * duration).toFixed(1)}s`;
 
         const fragment = document.createDocumentFragment();
+        const rowMultiplier = isMobile ? 1.35 : 2;
 
-        for (let rowIndex = 0; rowIndex < rows * 2; rowIndex += 1) {
+        for (let rowIndex = 0; rowIndex < rows * rowMultiplier; rowIndex += 1) {
           const span = document.createElement("span");
           span.className = "code-char";
 
           if (Math.random() <= density) {
-            const useFragment = Math.random() < 0.13;
+            const useFragment = Math.random() < (isMobile ? 0.06 : 0.13);
             span.textContent = useFragment
               ? randomItem(fragments)
               : randomItem(singles);
@@ -151,20 +167,39 @@ export function HeroCodeField() {
 
     render();
 
+    let resizeId = 0;
     let frame = 0;
     let animationId = 0;
+    const { prefersReducedMotion } = getMotionSettings();
     const pulse = () => {
       frame += 0.004;
       field.style.opacity = (0.85 + 0.15 * Math.sin(frame)).toFixed(3);
       animationId = window.requestAnimationFrame(pulse);
     };
 
-    pulse();
+    const scheduleRender = () => {
+      window.clearTimeout(resizeId);
+      resizeId = window.setTimeout(render, 140);
+    };
 
-    window.addEventListener("resize", render);
+    const observer = new IntersectionObserver(([entry]) => {
+      field.classList.toggle("is-paused", !entry?.isIntersecting);
+    });
+
+    observer.observe(field);
+
+    if (prefersReducedMotion) {
+      field.classList.add("is-reduced-motion");
+    } else {
+      pulse();
+    }
+
+    window.addEventListener("resize", scheduleRender);
 
     return () => {
-      window.removeEventListener("resize", render);
+      window.removeEventListener("resize", scheduleRender);
+      window.clearTimeout(resizeId);
+      observer.disconnect();
       window.cancelAnimationFrame(animationId);
     };
   }, []);
@@ -185,11 +220,25 @@ export function ParticleCanvas() {
     let animationId = 0;
     let width = 0;
     let height = 0;
+    let lastFrame = 0;
+    let resizeId = 0;
+    let isPaused = false;
+    let settings = getMotionSettings();
 
     const resize = () => {
-      const ratio = window.devicePixelRatio || 1;
-      width = window.innerWidth;
-      height = window.innerHeight;
+      settings = getMotionSettings();
+      const nextWidth = window.innerWidth;
+      const nextHeight = window.innerHeight;
+
+      if (nextWidth === width && nextHeight === height && particles.length) {
+        return;
+      }
+
+      const ratio = settings.isMobile
+        ? Math.min(window.devicePixelRatio || 1, 1.5)
+        : window.devicePixelRatio || 1;
+      width = nextWidth;
+      height = nextHeight;
 
       canvas.width = Math.floor(width * ratio);
       canvas.height = Math.floor(height * ratio);
@@ -197,42 +246,72 @@ export function ParticleCanvas() {
       canvas.style.height = `${height}px`;
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
 
-      const count = Math.min(150, Math.max(70, Math.floor((width * height) / 9000)));
+      if (settings.prefersReducedMotion) {
+        particles = [];
+        context.clearRect(0, 0, width, height);
+        return;
+      }
+
+      const count = settings.isMobile
+        ? Math.min(settings.isVerySmall ? 28 : 42, Math.max(22, Math.floor((width * height) / 16000)))
+        : Math.min(150, Math.max(70, Math.floor((width * height) / 9000)));
       particles = Array.from({ length: count }, () => ({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.16,
-        vy: (Math.random() - 0.5) * 0.16,
-        radius: 0.5 + Math.random() * 1.5,
-        alpha: 0.12 + Math.random() * 0.38,
+        vx: (Math.random() - 0.5) * (settings.isMobile ? 0.1 : 0.16),
+        vy: (Math.random() - 0.5) * (settings.isMobile ? 0.1 : 0.16),
+        radius: 0.5 + Math.random() * (settings.isMobile ? 1.1 : 1.5),
+        alpha: settings.isMobile
+          ? 0.1 + Math.random() * 0.24
+          : 0.12 + Math.random() * 0.38,
         phase: Math.random() * Math.PI * 2,
-        pulse: 0.004 + Math.random() * 0.012,
+        pulse: settings.isMobile
+          ? 0.003 + Math.random() * 0.006
+          : 0.004 + Math.random() * 0.012,
       }));
     };
 
-    const loop = () => {
+    const loop = (timestamp = 0) => {
+      animationId = window.requestAnimationFrame(loop);
+
+      if (isPaused || settings.prefersReducedMotion) return;
+      if (settings.isMobile && timestamp - lastFrame < 33) return;
+      lastFrame = timestamp;
+
       context.clearRect(0, 0, width, height);
 
-      for (let i = 0; i < particles.length; i += 1) {
-        const a = particles[i];
-        if (!a) continue;
+      if (!settings.isVerySmall) {
+        const connectionLimit = settings.isMobile ? 78 : 110;
+        const maxConnectionChecks = settings.isMobile
+          ? particles.length * 8
+          : Infinity;
+        let checks = 0;
 
-        for (let j = i + 1; j < particles.length; j += 1) {
-          const b = particles[j];
-          if (!b) continue;
+        for (let i = 0; i < particles.length; i += 1) {
+          const a = particles[i];
+          if (!a) continue;
 
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
-          const distance = Math.hypot(dx, dy);
+          for (let j = i + 1; j < particles.length; j += 1) {
+            const b = particles[j];
+            if (!b) continue;
 
-          if (distance < 110) {
-            const opacity = (1 - distance / 110) * 0.08;
-            context.strokeStyle = `rgba(255,59,59,${opacity})`;
-            context.lineWidth = 0.45;
-            context.beginPath();
-            context.moveTo(a.x, a.y);
-            context.lineTo(b.x, b.y);
-            context.stroke();
+            checks += 1;
+            if (checks > maxConnectionChecks) break;
+
+            const dx = a.x - b.x;
+            const dy = a.y - b.y;
+            const distance = Math.hypot(dx, dy);
+
+            if (distance < connectionLimit) {
+              const opacity =
+                (1 - distance / connectionLimit) * (settings.isMobile ? 0.045 : 0.08);
+              context.strokeStyle = `rgba(255,59,59,${opacity})`;
+              context.lineWidth = 0.45;
+              context.beginPath();
+              context.moveTo(a.x, a.y);
+              context.lineTo(b.x, b.y);
+              context.stroke();
+            }
           }
         }
       }
@@ -253,17 +332,27 @@ export function ParticleCanvas() {
         context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
         context.fill();
       }
+    };
 
-      animationId = window.requestAnimationFrame(loop);
+    const scheduleResize = () => {
+      window.clearTimeout(resizeId);
+      resizeId = window.setTimeout(resize, 140);
+    };
+
+    const handleVisibility = () => {
+      isPaused = document.hidden;
     };
 
     resize();
     loop();
 
-    window.addEventListener("resize", resize);
+    window.addEventListener("resize", scheduleResize);
+    document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", scheduleResize);
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.clearTimeout(resizeId);
       window.cancelAnimationFrame(animationId);
     };
   }, []);

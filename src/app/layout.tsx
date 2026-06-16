@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Fraunces, JetBrains_Mono, Inter } from "next/font/google";
 import { getSiteMetadata } from "@/lib/content";
 import "./globals.css";
@@ -29,6 +29,11 @@ const site = getSiteMetadata();
 export const metadata: Metadata = {
   title: site.name,
   description: site.description,
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

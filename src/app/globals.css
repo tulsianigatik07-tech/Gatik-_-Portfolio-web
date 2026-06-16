@@ -250,6 +250,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -273,6 +274,11 @@ body {
   flex-direction: column;
   animation: scrollUp linear infinite;
   will-change: transform;
+}
+
+.is-paused .code-col,
+.is-reduced-motion .code-col {
+  animation-play-state: paused;
 }
 
 .code-char {
@@ -573,6 +579,7 @@ body {
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  transform: translateZ(0);
 }
 
 .page-below,
@@ -1251,6 +1258,7 @@ body {
   content: "";
   pointer-events: none;
   transform: translateY(-100%);
+  will-change: transform, opacity;
 }
 
 .github-panel::after {
@@ -1263,6 +1271,7 @@ body {
   background: linear-gradient(90deg, transparent, rgba(255, 59, 59, 0.45), transparent);
   content: "";
   opacity: 0.45;
+  will-change: transform, opacity;
 }
 
 @keyframes githubScan {
@@ -1548,6 +1557,65 @@ body {
     --portfolio-section-gap: 96px;
   }
 
+  #code-field {
+    opacity: 0.76;
+  }
+
+  .code-col {
+    will-change: auto;
+  }
+
+  .code-char {
+    font-size: 10px;
+    line-height: 18px;
+  }
+
+  #particle-canvas {
+    opacity: 0.72;
+  }
+
+  .divider-signal,
+  .divider-convergence {
+    contain: paint;
+  }
+
+  .sig-line {
+    animation-duration: 9s;
+  }
+
+  .sig-node-one,
+  .sig-node-two,
+  .sig-node-three,
+  .conv-ring,
+  .conv-left,
+  .conv-right {
+    animation-duration: 7.5s;
+  }
+
+  .sig-node,
+  .conv-dot,
+  .conv-traveller {
+    filter: none;
+  }
+
+  .github-panel::before {
+    height: 22%;
+    animation-duration: 8.5s;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(255, 59, 59, 0.025),
+      rgba(255, 59, 59, 0.1),
+      rgba(255, 59, 59, 0.025),
+      transparent
+    );
+  }
+
+  .github-panel::after {
+    animation-duration: 8.5s;
+    opacity: 0.32;
+  }
+
   .site-nav {
     padding: 18px 22px;
   }
@@ -1565,12 +1633,26 @@ body {
     padding: 112px 28px 72px;
   }
 
+  .hero-inner {
+    max-width: 100%;
+    min-width: 0;
+  }
+
   .hero-inner::before {
     left: -16px;
   }
 
-  .subheadline br {
-    display: none;
+  .headline {
+    max-width: 100%;
+    font-size: 34px;
+    line-height: 1.18;
+    overflow-wrap: normal;
+    text-wrap: balance;
+  }
+
+  .subheadline {
+    width: min(100%, 320px);
+    overflow-wrap: anywhere;
   }
 
   .split-layout {
@@ -1619,6 +1701,10 @@ body {
     letter-spacing: 0.18em;
   }
 
+  .headline {
+    font-size: 32px;
+  }
+
   .actions {
     align-items: flex-start;
     flex-direction: column;
@@ -1638,9 +1724,23 @@ body {
     gap: 2px;
   }
 
+  .github-panel::before {
+    height: 18%;
+  }
+
   .site-footer {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+@media (max-width: 430px) {
+  #particle-canvas {
+    opacity: 0.58;
+  }
+
+  .github-panel::before {
+    opacity: 0.7;
   }
 }
 
@@ -1652,5 +1752,14 @@ body {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 1ms !important;
+  }
+
+  #code-field,
+  #particle-canvas {
+    opacity: 0.45 !important;
+  }
+
+  #particle-canvas {
+    display: none;
   }
 }
