@@ -208,7 +208,7 @@ export default function Home() {
               </span>
             </div>
             <div className="actions">
-              <a className="btn-primary" href="mailto:tulsianigatik07@gmail.com">
+              <a className="btn-primary" href="#contact">
                 Let&apos;s talk →
               </a>
               <a className="btn-secondary" href="#obsession">
