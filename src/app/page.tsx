@@ -191,16 +191,21 @@ export default function Home() {
 
         <div className="hero-page">
           <div className="hero-inner">
-            <p className="meta">AI Engineering · Open Source · Dubai</p>
+            <p className="meta">BCS AI &amp; BIG DATA · DUBAI, UAE</p>
             <h1 className="headline">
-              I build AI systems.
-              <br />I learn by <em>shipping</em> them.
+              I build systems.
+              <br />I learn from breaking things.
             </h1>
             <p className="subheadline">
-              Computer Science student focused on AI Engineering,
-              <br />
-              Open Source Software, and Production Systems.
+              Applied AI Engineer building production systems that turn ideas into
+              working software.
             </p>
+            <div className="hero-pills" aria-label="Current status">
+              <span className="hero-pill">Applied AI Engineer</span>
+              <span className="hero-pill hero-pill-open">
+                Open to summer intern / remote
+              </span>
+            </div>
             <div className="actions">
               <a className="btn-primary" href="mailto:tulsianigatik07@gmail.com">
                 Let&apos;s talk →
@@ -210,17 +215,9 @@ export default function Home() {
               </a>
             </div>
             <a className="resume-card" href="/Gatik_Tulsiani_Resume.pdf" download>
-              <span className="resume-icon" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-              </span>
               <span>
-                <span className="resume-label">Download Resume</span>
+                <span className="resume-label">DOWNLOAD RESUME</span>
                 <span className="resume-filename">Gatik_Tulsiani_Resume.pdf</span>
-              </span>
-              <span className="resume-arrow" aria-hidden="true">
-                ↓
               </span>
             </a>
           </div>
