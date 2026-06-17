@@ -25,7 +25,7 @@ const projects = [
       "Sentry",
     ],
     href: "https://github.com/tulsianigatik07-tech",
-    image: "/giro-architecture.png",
+    image: "/giro-landing-cover.png",
   },
   {
     title: "Suryami Portal",
@@ -45,6 +45,7 @@ const projects = [
       "Sentry",
     ],
     href: "#work",
+    image: "/suryami-dubai-night-cover.jpg",
     cover: "suryami",
   },
   {

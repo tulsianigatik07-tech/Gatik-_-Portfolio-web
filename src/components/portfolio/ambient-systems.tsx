@@ -54,17 +54,9 @@ function randomItem(items: string[]) {
 
 function columnDensity(x: number, totalWidth: number) {
   const nx = x / totalWidth;
+  const distanceFromCenter = Math.abs(nx - 0.5) * 2;
 
-  if (nx < 0.26) {
-    return 0.82 + 0.18 * (1 - nx / 0.26);
-  }
-
-  if (nx > 0.74) {
-    return 0.82 + 0.18 * ((nx - 0.74) / 0.26);
-  }
-
-  const cx = (nx - 0.26) / 0.48;
-  return 0.08 + 0.18 * Math.pow(Math.sin(cx * Math.PI), 0.6);
+  return 0.36 + 0.6 * Math.pow(distanceFromCenter, 0.72);
 }
 
 function redTone(columnIndex: number, totalColumns: number, opacity: number) {
@@ -112,9 +104,9 @@ export function HeroCodeField() {
         getMotionSettings();
       const width = window.innerWidth;
       const height = window.innerHeight;
-      const charWidth = isVerySmall ? 18 : isMobile ? 15 : 9;
-      const charHeight = isMobile ? 18 : 15;
-      const densityScale = prefersReducedMotion ? 0.45 : isMobile ? 0.64 : 1;
+      const charWidth = isVerySmall ? 17 : isMobile ? 14 : 8;
+      const charHeight = isMobile ? 18 : 14;
+      const densityScale = prefersReducedMotion ? 0.5 : isMobile ? 0.54 : 1.08;
       const rows = Math.ceil(height / charHeight) + (isMobile ? 2 : 4);
       const totalColumns = Math.ceil(width / charWidth) + 1;
 
@@ -122,32 +114,34 @@ export function HeroCodeField() {
         const x = columnIndex * charWidth;
         const density = columnDensity(x, width) * densityScale;
 
-        if (Math.random() > density + 0.05) continue;
+        if (Math.random() > density + (isMobile ? 0.02 : 0.14)) continue;
 
         const column = document.createElement("div");
         column.className = "code-col";
         column.style.left = `${x}px`;
 
         const duration = isMobile
-          ? 96 + Math.random() * 72
-          : 55 + Math.random() * 90;
+          ? 112 + Math.random() * 92
+          : 78 + Math.random() * 120;
         column.style.animationDuration = `${duration.toFixed(1)}s`;
         column.style.animationDelay = `${(-Math.random() * duration).toFixed(1)}s`;
 
         const fragment = document.createDocumentFragment();
-        const rowMultiplier = isMobile ? 1.35 : 2;
+        const rowMultiplier = isMobile ? 1.25 : 2.25;
 
         for (let rowIndex = 0; rowIndex < rows * rowMultiplier; rowIndex += 1) {
           const span = document.createElement("span");
           span.className = "code-char";
 
-          if (Math.random() <= density) {
-            const useFragment = Math.random() < (isMobile ? 0.06 : 0.13);
+          if (Math.random() <= density + (isMobile ? 0.02 : 0.08)) {
+            const useFragment = Math.random() < (isMobile ? 0.08 : 0.18);
             span.textContent = useFragment
               ? randomItem(fragments)
               : randomItem(singles);
 
-            const baseOpacity = 0.06 + Math.random() * 0.44;
+            const baseOpacity = isMobile
+              ? 0.06 + Math.random() * 0.34
+              : 0.11 + Math.random() * 0.54;
             span.style.color = redTone(
               columnIndex,
               totalColumns,
