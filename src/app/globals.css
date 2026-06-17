@@ -1573,7 +1573,6 @@ body:has(.journey-page) {
   pointer-events: none;
 }
 
-.journey-hero,
 .journey-timeline {
   width: min(100%, 720px);
   margin: 0 auto;
@@ -1581,12 +1580,15 @@ body:has(.journey-page) {
 }
 
 .journey-hero {
+  width: min(100%, 900px);
+  margin: 0 auto;
   padding-bottom: clamp(72px, 12vw, 132px);
+  text-align: center;
 }
 
 .journey-kicker {
   display: block;
-  margin-bottom: 2.25rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
   color: var(--portfolio-faint);
   font-family: var(--portfolio-mono);
   font-size: 11px;
@@ -1600,18 +1602,19 @@ body:has(.journey-page) {
 }
 
 .journey-title {
-  max-width: 680px;
+  max-width: 900px;
+  margin: 0 auto;
   color: var(--portfolio-text);
   font-family: var(--portfolio-serif);
-  font-size: clamp(3.05rem, 8vw, 6.7rem);
+  font-size: clamp(3.75rem, 5.5vw, 5rem);
   font-weight: 400;
-  letter-spacing: -0.02em;
-  line-height: 0.98;
+  letter-spacing: 0;
+  line-height: 1.04;
 }
 
 .journey-intro {
   max-width: 430px;
-  margin-top: clamp(2.25rem, 5vw, 4.25rem);
+  margin: clamp(2rem, 4vw, 3rem) auto 0;
   color: var(--portfolio-muted);
   font-family: var(--portfolio-sans);
   font-size: clamp(1rem, 2vw, 1.14rem);
@@ -1890,7 +1893,7 @@ body:has(.journey-page) {
   }
 
   .journey-title {
-    max-width: 7.8ch;
+    max-width: min(100%, 560px);
     font-size: clamp(2.25rem, 10vw, 3.45rem);
     line-height: 1.04;
     overflow-wrap: break-word;

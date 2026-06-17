@@ -211,7 +211,7 @@ export default function Home() {
               <a className="btn-primary" href="#contact">
                 Let&apos;s talk →
               </a>
-              <a className="btn-secondary" href="#obsession">
+              <a className="btn-secondary" href="/journey">
                 See the full experience
               </a>
             </div>
