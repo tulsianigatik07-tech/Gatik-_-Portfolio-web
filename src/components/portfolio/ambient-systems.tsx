@@ -2,11 +2,44 @@
 
 import { useEffect, useRef } from "react";
 
-const singles = "01#$%&*+-/\\:;=><@!{}[]()^~|_`?01010101110001010011".split(
-  "",
-);
+const singles =
+  "001101010111001010011010#$%&*+-/\\:;=><@!{}[]()^~|_`?.".split("");
 
 const fragments = [
+  "AI",
+  "API",
+  "RAG",
+  "LLM",
+  "GPU",
+  "SQL",
+  "redis",
+  "queue",
+  "worker",
+  "vector",
+  "embed",
+  "chunk",
+  "index",
+  "search",
+  "agent",
+  "eval",
+  "trace",
+  "latency",
+  "retry",
+  "cache",
+  "router",
+  "schema",
+  "backend",
+  "service",
+  "pipeline",
+  "deploy",
+  "build",
+  "system",
+  "repo",
+  "main",
+  "commit",
+  "merge",
+  "diff",
+  "HEAD",
   "fn",
   "if",
   "let",
@@ -18,33 +51,22 @@ const fragments = [
   "struct",
   "async",
   "await",
-  "git",
-  "push",
-  "pull",
-  "HEAD",
-  "main",
-  "merge",
-  "diff",
   "npm",
   "tsx",
   "jsx",
   "ts",
   "py",
   "go",
-  "AI",
-  "ML",
-  "LLM",
-  "RAG",
-  "API",
-  "CLI",
   "SELECT",
   "FROM",
   "WHERE",
   "JOIN",
-  "embed(",
-  "chunk(",
-  "index(",
-  "search(",
+  "model.run",
+  "db.write",
+  "job.next",
+  "ship()",
+  "break()",
+  "fix()",
 ];
 
 function randomItem(items: string[]) {
@@ -56,7 +78,7 @@ function columnDensity(x: number, totalWidth: number) {
   const nx = x / totalWidth;
   const distanceFromCenter = Math.abs(nx - 0.5) * 2;
 
-  return 0.36 + 0.6 * Math.pow(distanceFromCenter, 0.72);
+  return 0.9 + 0.18 * Math.pow(distanceFromCenter, 0.62);
 }
 
 function redTone(columnIndex: number, totalColumns: number, opacity: number) {
@@ -105,16 +127,16 @@ export function HeroCodeField() {
       const width = window.innerWidth;
       const height = window.innerHeight;
       const charWidth = isVerySmall ? 17 : isMobile ? 14 : 8;
-      const charHeight = isMobile ? 18 : 14;
-      const densityScale = prefersReducedMotion ? 0.5 : isMobile ? 0.54 : 1.08;
-      const rows = Math.ceil(height / charHeight) + (isMobile ? 2 : 4);
+      const charHeight = isMobile ? 18 : 13;
+      const densityScale = prefersReducedMotion ? 0.72 : isMobile ? 0.58 : 1.18;
+      const rows = Math.ceil(height / charHeight) + (isMobile ? 4 : 8);
       const totalColumns = Math.ceil(width / charWidth) + 1;
 
       for (let columnIndex = 0; columnIndex < totalColumns; columnIndex += 1) {
         const x = columnIndex * charWidth;
         const density = columnDensity(x, width) * densityScale;
 
-        if (Math.random() > density + (isMobile ? 0.02 : 0.14)) continue;
+        if (Math.random() > density + (isMobile ? 0.04 : 0.22)) continue;
 
         const column = document.createElement("div");
         column.className = "code-col";
@@ -127,21 +149,21 @@ export function HeroCodeField() {
         column.style.animationDelay = `${(-Math.random() * duration).toFixed(1)}s`;
 
         const fragment = document.createDocumentFragment();
-        const rowMultiplier = isMobile ? 1.25 : 2.25;
+        const rowMultiplier = isMobile ? 1.35 : 2.55;
 
         for (let rowIndex = 0; rowIndex < rows * rowMultiplier; rowIndex += 1) {
           const span = document.createElement("span");
           span.className = "code-char";
 
-          if (Math.random() <= density + (isMobile ? 0.02 : 0.08)) {
-            const useFragment = Math.random() < (isMobile ? 0.08 : 0.18);
+          if (Math.random() <= density + (isMobile ? 0.03 : 0.18)) {
+            const useFragment = Math.random() < (isMobile ? 0.08 : 0.2);
             span.textContent = useFragment
               ? randomItem(fragments)
               : randomItem(singles);
 
             const baseOpacity = isMobile
-              ? 0.06 + Math.random() * 0.34
-              : 0.11 + Math.random() * 0.54;
+              ? 0.05 + Math.random() * 0.3
+              : 0.12 + Math.random() * 0.58;
             span.style.color = redTone(
               columnIndex,
               totalColumns,
