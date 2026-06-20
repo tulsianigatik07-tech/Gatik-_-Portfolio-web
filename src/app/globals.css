@@ -1753,8 +1753,34 @@ body:has(.journey-page) {
     --portfolio-section-gap: 96px;
   }
 
+  .hero-section {
+    background: #010101;
+  }
+
+  .hero-section::before {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(
+        ellipse 82% 72% at 50% 48%,
+        rgba(0, 0, 0, 0.16) 0%,
+        rgba(0, 0, 0, 0.24) 58%,
+        rgba(0, 0, 0, 0.34) 100%
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.28) 0%,
+        rgba(0, 0, 0, 0.12) 28%,
+        rgba(0, 0, 0, 0.14) 72%,
+        rgba(0, 0, 0, 0.3) 100%
+      );
+    content: "";
+    pointer-events: none;
+  }
+
   #code-field {
-    opacity: 0.76;
+    opacity: 0.98;
   }
 
   .code-col {
@@ -1763,7 +1789,25 @@ body:has(.journey-page) {
 
   .code-char {
     font-size: 10px;
-    line-height: 18px;
+    line-height: 16px;
+  }
+
+  .centre-veil {
+    background:
+      radial-gradient(
+        ellipse 54% 48% at 50% 45%,
+        rgba(5, 5, 5, 0.88) 0%,
+        rgba(5, 5, 5, 0.72) 40%,
+        rgba(5, 5, 5, 0.3) 68%,
+        rgba(5, 5, 5, 0.08) 100%
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(5, 5, 5, 0.44) 0%,
+        rgba(5, 5, 5, 0.08) 24%,
+        rgba(5, 5, 5, 0.08) 72%,
+        rgba(5, 5, 5, 0.42) 100%
+      );
   }
 
   #particle-canvas {
@@ -1963,16 +2007,22 @@ body:has(.journey-page) {
     gap: 14px;
   }
 
+  .hero-pills {
+    width: 100%;
+  }
+
   .btn-primary,
   .btn-secondary {
     min-height: 52px;
   }
 
   .hero-pill {
-    max-width: 100%;
+    max-width: min(100%, 320px);
+    min-width: 0;
     font-size: 11px;
     overflow-wrap: anywhere;
     text-align: center;
+    white-space: normal;
   }
 
   .resume-filename {
@@ -2000,6 +2050,15 @@ body:has(.journey-page) {
 }
 
 @media (max-width: 430px) {
+  .headline {
+    max-width: min(100%, 300px);
+    font-size: clamp(30px, 8.8vw, 36px);
+  }
+
+  .hero-pill-open {
+    max-width: min(100%, 276px);
+  }
+
   #particle-canvas {
     opacity: 0.58;
   }
